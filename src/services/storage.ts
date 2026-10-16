@@ -1,13 +1,7 @@
 import { Room, HotelService, GalleryItem, BookingRequest, HotelSettings } from '../types';
+import { ASSET_IMAGES, resolveHotelImage } from '../assets/images';
 
-// Asset references generated specifically for Jugurtha Palace Hotel
-export const ASSET_IMAGES = {
-  hero: '/src/assets/images/hero_jugurtha_palace_1792168615686.jpg',
-  pool: '/src/assets/images/pool_jugurtha_palace_1792168616954.jpg',
-  suite: '/src/assets/images/suite_jugurtha_palace_1792168617490.jpg',
-  dining: '/src/assets/images/dining_jugurtha_palace_1792168619051.jpg',
-  oasis: '/src/assets/images/gafsa_oasis_jugurtha_1792168619641.jpg',
-};
+export { ASSET_IMAGES, resolveHotelImage };
 
 export const DEFAULT_SETTINGS: HotelSettings = {
   name: 'Jugurtha Palace Hotel',
@@ -325,7 +319,13 @@ export const StorageService = {
   getSettings(): HotelSettings {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-      if (data) return JSON.parse(data);
+      if (data) {
+        const parsed: HotelSettings = JSON.parse(data);
+        return {
+          ...parsed,
+          heroImage: resolveHotelImage(parsed.heroImage),
+        };
+      }
     } catch (e) {
       console.warn('Error reading settings from localStorage', e);
     }
@@ -339,7 +339,15 @@ export const StorageService = {
   getRooms(): Room[] {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.ROOMS);
-      if (data) return JSON.parse(data);
+      if (data) {
+        const parsed: Room[] = JSON.parse(data);
+        return parsed.map((room) => ({
+          ...room,
+          images: (room.images && room.images.length > 0 ? room.images : [ASSET_IMAGES.suite]).map((img) =>
+            resolveHotelImage(img)
+          ),
+        }));
+      }
     } catch (e) {
       console.warn('Error reading rooms from localStorage', e);
     }
@@ -367,7 +375,13 @@ export const StorageService = {
   getGallery(): GalleryItem[] {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.GALLERY);
-      if (data) return JSON.parse(data);
+      if (data) {
+        const parsed: GalleryItem[] = JSON.parse(data);
+        return parsed.map((item) => ({
+          ...item,
+          imageUrl: resolveHotelImage(item.imageUrl),
+        }));
+      }
     } catch (e) {
       console.warn('Error reading gallery from localStorage', e);
     }

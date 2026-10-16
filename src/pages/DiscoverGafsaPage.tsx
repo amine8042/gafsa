@@ -2,7 +2,7 @@ import React from 'react';
 import { Compass, MapPin, Landmark, Mountain, Sun, Info, Calendar } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
-import { ASSET_IMAGES } from '../services/storage';
+import { ASSET_IMAGES } from '../assets/images';
 
 export const DiscoverGafsaPage: React.FC = () => {
   const { t, language } = useLanguage();
@@ -56,6 +56,9 @@ export const DiscoverGafsaPage: React.FC = () => {
             alt="Paysages de Gafsa"
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover opacity-35"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = ASSET_IMAGES.oasis;
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-transparent" />
         </div>

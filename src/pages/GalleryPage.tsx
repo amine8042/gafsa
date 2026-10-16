@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { ImageLightbox } from '../components/ImageLightbox';
 import { GalleryItem } from '../types';
 import { Maximize2, Camera } from 'lucide-react';
+import { resolveHotelImage, ASSET_IMAGES } from '../assets/images';
 
 export const GalleryPage: React.FC = () => {
   const { gallery } = useHotel();
@@ -75,11 +76,14 @@ export const GalleryPage: React.FC = () => {
               onClick={() => setActiveLightboxIndex(index)}
             >
               <img
-                src={item.imageUrl}
+                src={resolveHotelImage(item.imageUrl)}
                 alt={item.title}
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 loading="lazy"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = ASSET_IMAGES.hero;
+                }}
               />
 
               {/* Hover overlay with title & zoom icon */}

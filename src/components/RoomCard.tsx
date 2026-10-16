@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Users, Bed, ArrowRight, Check } from 'lucide-react';
 import { Room } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import { resolveHotelImage, ASSET_IMAGES } from '../assets/images';
 
 interface RoomCardProps {
   room: Room;
@@ -20,28 +21,26 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
       ? room.descriptionEn
       : room.description;
 
-  const imageSrc = room.images && room.images.length > 0 ? room.images[0] : '';
+  const rawImage = room.images && room.images.length > 0 ? room.images[0] : ASSET_IMAGES.suite;
+  const imageSrc = resolveHotelImage(rawImage);
 
   return (
     <article className="group bg-white border border-stone-200/80 rounded-lg overflow-hidden flex flex-col hover:border-[#C5A880]/60 transition-all duration-300 hover:shadow-lg">
       {/* Image container with subtle aspect ratio */}
       <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
-        {imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={title}
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            loading="lazy"
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.display = 'none';
-            }}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-stone-200 text-stone-500 font-serif">
-            Jugurtha Palace
-          </div>
-        )}
+        <img
+          src={imageSrc}
+          alt={title}
+          referrerPolicy="no-referrer"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          loading="lazy"
+          onError={(e) => {
+            const img = e.currentTarget as HTMLImageElement;
+            if (img.src !== ASSET_IMAGES.suite) {
+              img.src = ASSET_IMAGES.suite;
+            }
+          }}
+        />
 
         {/* Price overlay on image with luxury styling */}
         <div className="absolute bottom-3 left-3 bg-[#0B132B]/85 backdrop-blur-sm text-white px-3 py-1.5 rounded text-xs font-medium">

@@ -17,6 +17,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { ReservationForm } from '../components/ReservationForm';
 import { ImageLightbox } from '../components/ImageLightbox';
 import { GalleryItem } from '../types';
+import { resolveHotelImage, ASSET_IMAGES } from '../assets/images';
 
 export const RoomDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -57,7 +58,10 @@ export const RoomDetailPage: React.FC = () => {
       ? room.descriptionEn
       : room.description;
 
-  const currentImage = room.images && room.images.length > 0 ? room.images[activeImageIndex] : '';
+  const resolvedImages = (room.images && room.images.length > 0 ? room.images : [ASSET_IMAGES.suite]).map((img) =>
+    resolveHotelImage(img)
+  );
+  const currentImage = resolvedImages[activeImageIndex] || ASSET_IMAGES.suite;
 
   const lightboxItem: GalleryItem | null = currentImage
     ? {

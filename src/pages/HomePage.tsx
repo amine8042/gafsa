@@ -20,7 +20,7 @@ import {
 import { useHotel } from '../context/HotelContext';
 import { useLanguage } from '../context/LanguageContext';
 import { RoomCard } from '../components/RoomCard';
-import { ASSET_IMAGES } from '../services/storage';
+import { ASSET_IMAGES, resolveHotelImage } from '../assets/images';
 
 export const HomePage: React.FC = () => {
   const { settings, rooms, gallery, services } = useHotel();
@@ -69,10 +69,13 @@ export const HomePage: React.FC = () => {
         {/* Background Image with Measured Contrast Scrim */}
         <div className="absolute inset-0 z-0">
           <img
-            src={settings.heroImage || ASSET_IMAGES.hero}
+            src={resolveHotelImage(settings.heroImage) || ASSET_IMAGES.hero}
             alt="Jugurtha Palace Hotel Gafsa"
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover scale-100 animate-in fade-in zoom-in-105 duration-1000"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = ASSET_IMAGES.hero;
+            }}
           />
           {/* Gradients ensuring WCAG 4.5:1 legibility across all viewport positions */}
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-stone-950/40" />
@@ -405,11 +408,14 @@ export const HomePage: React.FC = () => {
               className="group relative aspect-[4/3] rounded-lg overflow-hidden bg-stone-100 border border-stone-200"
             >
               <img
-                src={item.imageUrl}
+                src={resolveHotelImage(item.imageUrl)}
                 alt={item.title}
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = ASSET_IMAGES.hero;
+                }}
               />
               <div className="absolute inset-0 bg-stone-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4 text-white text-xs font-medium">
                 <span className="truncate">{item.title}</span>

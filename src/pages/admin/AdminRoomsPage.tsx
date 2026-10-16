@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Check, X, BedDouble, AlertCircle } from 'lucide-react';
 import { useHotel } from '../../context/HotelContext';
 import { Room } from '../../types';
-import { ASSET_IMAGES } from '../../services/storage';
+import { ASSET_IMAGES, resolveHotelImage } from '../../assets/images';
 
 export const AdminRoomsPage: React.FC = () => {
   const { rooms, addRoom, updateRoom, deleteRoom } = useHotel();
@@ -168,9 +168,12 @@ export const AdminRoomsPage: React.FC = () => {
                   <td className="py-3 px-4 font-semibold text-stone-900 flex items-center gap-3">
                     {room.images && room.images.length > 0 ? (
                       <img
-                        src={room.images[0]}
+                        src={resolveHotelImage(room.images[0])}
                         alt=""
                         className="w-10 h-8 object-cover rounded shrink-0 border border-stone-200"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = ASSET_IMAGES.suite;
+                        }}
                       />
                     ) : (
                       <div className="w-10 h-8 bg-stone-200 rounded shrink-0" />

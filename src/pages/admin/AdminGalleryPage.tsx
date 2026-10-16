@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Trash2, Edit2, X, Image as ImageIcon } from 'lucide-react';
 import { useHotel } from '../../context/HotelContext';
 import { GalleryItem } from '../../types';
-import { ASSET_IMAGES } from '../../services/storage';
+import { ASSET_IMAGES, resolveHotelImage } from '../../assets/images';
 
 export const AdminGalleryPage: React.FC = () => {
   const { gallery, addGalleryItem, updateGalleryItem, deleteGalleryItem } = useHotel();
@@ -94,10 +94,13 @@ export const AdminGalleryPage: React.FC = () => {
           >
             <div className="relative aspect-[4/3] bg-stone-100">
               <img
-                src={item.imageUrl}
+                src={resolveHotelImage(item.imageUrl)}
                 alt={item.title}
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = ASSET_IMAGES.hero;
+                }}
               />
               <span className="absolute top-2 left-2 bg-stone-950/80 backdrop-blur-sm text-white px-2 py-0.5 rounded text-[10px] uppercase font-semibold">
                 {item.category}
