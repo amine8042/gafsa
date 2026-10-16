@@ -1,0 +1,6 @@
+{
+  "name": "Jugurtha Palace Hotel",
+  "description": "Site officiel de l'Hôtel Jugurtha Palace 5 étoiles à Gafsa, Tunisie. Réservations directes via WhatsApp et e-mail, chambres et suites de luxe, piscine et services d'exception.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
